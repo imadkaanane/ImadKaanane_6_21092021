@@ -19,8 +19,8 @@ mongoose.connect(`${mongoConnect}`,{ useNewUrlParser: true, useUnifiedTopology: 
   .then(() => console.log(`Connexion à MongoDB réussie avec le profil : ${profilName}!`))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
   
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
-app.use(helmet());
 app.use(cookieSession({
   name :cookieName,
   secret: secretCookie,
