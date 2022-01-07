@@ -19,22 +19,29 @@ mongoose.connect(`${mongoConnect}`,{ useNewUrlParser: true, useUnifiedTopology: 
   .then(() => console.log(`Connexion à MongoDB réussie avec le profil : ${profilName}!`))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  next();
+});
+
  
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(helmet.crossOriginOpenerPolicy({ policy: "same-origin" }));
-app.use(helmet.crossOriginEmbedderPolicy({ policy: "require-corp" }));
-app.use(helmet.contentSecurityPolicy());
-app.use(helmet.dnsPrefetchControl());
-app.use(helmet.expectCt());
-app.use(helmet.frameguard());
-app.use(helmet.hidePoweredBy());
-app.use(helmet.hsts());
-app.use(helmet.ieNoOpen());
-app.use(helmet.noSniff());
-app.use(helmet.originAgentCluster());
-app.use(helmet.permittedCrossDomainPolicies());
-app.use(helmet.referrerPolicy());
-app.use(helmet.xssFilter());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }),
+        helmet.crossOriginOpenerPolicy({ policy: "same-origin" }),
+        helmet.crossOriginEmbedderPolicy({ policy: "require-corp" }),
+        helmet.contentSecurityPolicy(),
+        helmet.dnsPrefetchControl(),
+        helmet.expectCt(),
+        helmet.frameguard(),
+        helmet.hidePoweredBy(),
+        helmet.hsts(),
+        helmet.ieNoOpen(),
+        helmet.noSniff(),
+        helmet.originAgentCluster(),
+        helmet.permittedCrossDomainPolicies(),
+        helmet.referrerPolicy(),
+        helmet.xssFilter());
 
 app.use(cookieSession({
   name :cookieName,
@@ -45,12 +52,6 @@ app.use(cookieSession({
   domain: host,
 }))
 
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
-});
 
 
 app.use(bodyParser.json());
