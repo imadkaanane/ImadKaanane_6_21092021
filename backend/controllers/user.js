@@ -3,9 +3,9 @@ const bcrypt = require('bcrypt');
 //jwt permet l'échange sécurisé de jetons (tokens)
 const jwt = require('jsonwebtoken');
 const Maskdata = require('maskdata');
-const dotenv = require('dotenv').config();
-tokenSecret = process.env.TOKEN_SECRET;
 const User = require('../models/user');
+require('dotenv').config();
+tokenSecret = process.env.TOKEN_SECRET;
 
 // Creation fonctions signup et login
 // Créer compte utilisateur

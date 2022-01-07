@@ -65,19 +65,12 @@ exports.getAllSauces = (req, res, next) => {
 // Like Or Dislike 
 // Un seul like ou dislike par user 
 exports.likeOrNot = (req, res, next) => {
-	const like = req.body.like
-	const userId = req.body.userId
-	const sauceId = req.params.id
 
-	switch (like) {
+	switch (req.body.like) {
 		case 1:
 			Sauce.updateOne(
-				{_id: sauceId},
-				{
-					$inc: {likes: 1},
-					$push: {usersLiked: userId},
-					_id: sauceId,
-				}
+				{_id: req.params.id},
+				{$inc: {likes: 1}, $push: {usersLiked: req.body.userId}, _id: req.params.id,}
 			)
 				.then(() => res.status(200).json({message: "Like ajouté à la sauce !"}))
 				.catch((error) => res.status(400).json({error}))
@@ -85,40 +78,28 @@ exports.likeOrNot = (req, res, next) => {
 
 		case -1:
 			Sauce.updateOne(
-				{_id: sauceId},
-				{
-					$inc: {dislikes: 1},
-					$push: {usersDisliked: userId},
-					_id: sauceId,
-				}
+				{_id: req.params.id},
+				{$inc: {dislikes: 1}, $push: {usersDisliked: req.body.userId}, _id: req.params.id,}
 			)
 				.then(() => res.status(200).json({message: "Dislike ajouté à la sauce !"}))
 				.catch((error) => res.status(400).json({error}))
 			break
 
 		case 0:
-			Sauce.findOne({_id: sauceId})
+			Sauce.findOne({_id: req.params.id})
 				.then((sauce) => {
-					if (sauce.usersLiked.includes(userId)) {
+					if (sauce.usersLiked.includes(req.body.userId)) {
 						Sauce.updateOne(
-							{_id: sauceId},
-							{
-								$pull: {usersLiked: userId},
-								$inc: {likes: -1},
-								id: sauceId,
-							}
+							{_id: req.params.id},
+							{$pull: {usersLiked: req.body.userId}, $inc: {likes: -1}, id: req.params.id,}
 						)
 							.then(() => res.status(200).json({message: "Like retiré de la sauce !"}))
 							.catch((error) => res.status(400).json({error}))
 					}
-					if (sauce.usersDisliked.includes(userId)) {
+					if (sauce.usersDisliked.includes(req.body.userId)) {
 						Sauce.updateOne(
-							{_id: sauceId},
-							{
-								$pull: {usersDisliked: userId},
-								$inc: {dislikes: -1},
-								id: sauceId,
-							}
+							{_id: req.params.id},
+							{$pull: {usersDisliked: req.body.userId}, $inc: {dislikes: -1}, id: req.params.id,}
 						)
 							.then(() => res.status(200).json({message: "Dislike retiré de la sauce !"}))
 							.catch((error) => res.status(400).json({error}))

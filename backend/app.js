@@ -7,7 +7,7 @@ const cookieSession = require("cookie-session");
 
 const app = express(); 
 
-const dotenv = require('dotenv').config()  // Charge la variable d'environnement
+require('dotenv').config()  // Charge la variable d'environnement
 
 host = process.env.HOST
 profilName = process.env.USER;
