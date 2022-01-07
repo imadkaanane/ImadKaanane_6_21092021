@@ -18,7 +18,7 @@ exports.createSauce = (req, res, next) => {
     });
     sauce.save()// Enregistre dans la db l'objet et renvoie une promesse
       .then(() => res.status(201).json({ message: 'Nouvelle sauce enregistrée !'}))
-      .catch(error => res.status(400).json({ error }));
+      .catch(error => res.status(403).json({ error }));
 };
 
 // Modifier la Sauce
