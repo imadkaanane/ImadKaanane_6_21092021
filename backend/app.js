@@ -18,22 +18,11 @@ secretCookie = process.env.SECRET_COOKIE;
 mongoose.connect(`${mongoConnect}`,{ useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log(`Connexion à MongoDB réussie avec le profil : ${profilName}!`))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
- 
+
+app.use (helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }),
         helmet.crossOriginOpenerPolicy({ policy: "same-origin" }),
-        helmet.crossOriginEmbedderPolicy({ policy: "require-corp" }),
-        helmet.contentSecurityPolicy(),
-        helmet.dnsPrefetchControl(),
-        helmet.expectCt(),
-        helmet.frameguard(),
-        helmet.hidePoweredBy(),
-        helmet.hsts(),
-        helmet.ieNoOpen(),
-        helmet.noSniff(),
-        helmet.originAgentCluster(),
-        helmet.permittedCrossDomainPolicies(),
-        helmet.referrerPolicy(),
-        helmet.xssFilter());
+        helmet.crossOriginEmbedderPolicy({ policy: "require-corp" }));
 
 app.use(cookieSession({
   name :cookieName,
